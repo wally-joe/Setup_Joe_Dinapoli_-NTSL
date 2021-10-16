@@ -1,0 +1,131 @@
+var
+  mm_desloc,aux_desloc          : float;
+  chave2,a,b,c,g,h,ax,y, period : integer;
+function Lower_index(SerieDados : Float;
+periodo : integer) : integer;
+var
+  i,n : integer;
+begin
+  n := periodo - 1;
+  i := 0;
+  while (n >= 0) do
+    begin
+      if (Close[n] < Close[i]) then
+        begin
+          i := n;
+        end;
+      n := n - 1;
+    end;
+  result := i;
+end;
+function Higher_index(SerieDados : Float;
+periodo : integer) : integer;
+var
+  i,n : integer;
+begin
+  n := periodo - 1;
+  i := 0;
+  while (n >= 0) do
+    begin
+      if (Close[n] > Close[i]) then
+        begin
+          i := n;
+        end;
+      n := n - 1;
+    end;
+  result := i;
+end;
+begin
+  aux_desloc := MediaExp(3,Close);
+  mm_desloc := aux_desloc[3];
+  period:=10;
+
+  //Condições de Compra
+  begin
+    a := Lower_index(Close,period);
+    if (Close[a] < mm_desloc) and (Close[a + 1] < mm_desloc) and (Close[a + 2] < mm_desloc) and (Close[a + 3] < mm_desloc) then
+      begin
+        b := a - 1;
+        while (b > 0) do
+          begin
+            if (Close[b] > mm_desloc) then
+              begin
+                chave2 := b;
+                b := (b * ( - 1));
+              end;
+            b := b - 1;
+          end;
+        c := chave2 - 1;
+        while (c >= 0) do
+          begin
+            if (Close[c] < mm_desloc) then
+              begin
+                ax := c;
+                c := (c * ( - 1));
+              end;
+            c := c - 1;
+          end; 
+        g := ax - 1;
+        while (g >= 0) do
+          begin
+            if (Close[g] > mm_desloc) then
+              begin
+                h := Lower_index(Close,chave2); //Condição do topo atual ser menor que o anterior
+                if (close[a] < close[h]) then
+                  begin
+                    ax:= 1;
+                    g:= -1;
+                    paintbar(clgreen);
+                  end;
+              end;
+            g := g - 1;
+          end;
+      end;
+  end;
+  plot(ax);
+  chave2:=0; a:=0; b:=0; c:=0; g:=0; h:=0; ax:=0; 
+
+   //Condições de Venda
+  a := Higher_index(Close,period);
+    if (Close[a] > mm_desloc) and (Close[a + 1] > mm_desloc) and (Close[a + 2] > mm_desloc) and (Close[a + 3] > mm_desloc) then
+      begin
+        b := a - 1;
+        while (b > 0) do
+          begin
+            if (Close[b] < mm_desloc) then
+              begin
+                chave2 := b;
+                b := (b * ( - 1));
+              end;
+            b := b - 1;
+          end;
+        c := chave2 - 1;
+        while (c >= 0) do
+          begin
+            if (Close[c] > mm_desloc) then
+              begin
+                ax := c;
+                c := (c * ( - 1));
+              end;
+            c := c - 1;
+          end; 
+        g := ax - 1;
+        while (g >= 0) do
+          begin
+            if (Close[g] < mm_desloc) then
+              begin
+                h := Higher_index(Close,chave2); //Condição do topo atual ser menor que o anterior
+                if (close[a] > close[h]) then
+                  begin
+                    y:= -1;
+                    g:= -1;
+                    paintbar(clred);
+                  end;
+              end;
+            g := g - 1;
+          end;
+      end;
+  end;
+  plot2(y);
+  chave2:=0; a:=0; b:=0; c:=0; g:=0; h:=0; y:=0; 
+end;

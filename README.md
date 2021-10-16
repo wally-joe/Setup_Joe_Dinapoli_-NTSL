@@ -1,4 +1,4 @@
-# Setup_Joe_Dinapoli
+# Setup Joe Dinapoli
 ![4637aaeaf2bd9ae1fb3b52c961d5349d](https://user-images.githubusercontent.com/87108226/137567399-6e6df342-1f5d-4e23-b536-ce0b4d629399.jpg)
 
 Setup desenvolvido por Joe Dinapoli para operar o mercado de capitais, setup baseado na análise gráfica e análise técnica.
